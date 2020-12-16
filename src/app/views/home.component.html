@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="todos form-wrap">
+    <!-- Titulo de la Lista -->
+    <h4>Lista de tareas</h4>
+
+      <div class="form-field-wrap">
+
+        <!-- Acciones a realizar -->
+        <!-- Seleccion de todos los registros -->
+        <mat-checkbox class="checkbox" (change)="selectAll()" [checked]="selectedAll">
+          <span class="task-added"></span>
+          <span>Seleccionar todas</span>
+        </mat-checkbox>
+
+        <!-- Añadir nueva tarea -->
+        <div>
+          <form (submit)="addTask($event)">
+            <div class="row">
+              <div class="col-8">
+                <mat-form-field  class="full-width">
+                    <input [(ngModel)]="newTodo" (keyup.enter)="newTodo=''" class="textfield" name="newTodo" matInput placeholder="Añadir nueva tarea">
+                  </mat-form-field>
+              </div>
+              <div class="col-4">
+                <button mat-raised-button  type="submit" class="add-button mt-2" [disabled]="newTodo===''">Añadir</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Listado de tareas creadas -->
+        <ul cdkDropList (cdkDropListDropped)="drop($event)" class="task-list">
+          <li class="example-box" cdkDrag *ngFor="let todo of todos; let i=index">
+            <div class="row w-100">
+              <div class="col-10">
+                <mat-checkbox class="checkbox" [(ngModel)]="todo.completed" (change)="comprobarSiAllSelected()"><span class="task-added" [ngClass]="{'checked': todo.completed}">{{ todo.newTodo }}</span></mat-checkbox>
+              </div>
+              <div class="col-2">
+                <i (click)="deleteTask(i)" class="material-icons delete-icon">delete</i>
+              </div>
+            </div>
+          </li> 
+        </ul>
+        
+        <!-- Boton para eliminar todas las tareas -->
+        <div class="mt-5">
+          <button mat-raised-button class="delete-selected" [disabled]="deshabilitado" (click)="deleteSelectedTasks()">Eliminar seleccionadas</button>
+        </div>
+      </div>
+  </div>
+</div>

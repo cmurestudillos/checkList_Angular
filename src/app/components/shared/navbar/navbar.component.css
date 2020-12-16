@@ -1,0 +1,23 @@
+/* Estilos del componente */
+.titulo{
+    color:#fff; 
+    display:inline-block;
+}
+
+.mat-toolbar{
+    padding: 100px !important;
+    padding-left: 0 !important;
+}
+
+.mat-icon-button {
+    padding: 0;
+    min-width: 0;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    line-height: 40px;
+    border-radius: 50%;
+    top: 1%;
+    position: absolute;
+    right: 1%;
+}
