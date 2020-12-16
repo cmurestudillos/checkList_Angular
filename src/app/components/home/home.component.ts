@@ -10,40 +10,91 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 export class HomeComponent{
 
   // Variables
-  newTodo: string = '';
-  todos: any = [];
-  todoObj: any;
+  newTask: string = '';
+  tasks: any = [];
+  taskObjAdd: any;
+  taskObjEdit: any;
   deshabilitado: boolean;
   selectedAll: any;
   selectedNames: any;
+  editarTask: any;
 
   constructor() {
-    this.todos = JSON.parse(localStorage.getItem('tarea'));
+    this.tasks = [];
     this.deshabilitado = true;
+    this.editarTask = false;
   }
   //----------------------------------------------------------------------//
-  // Metodo addTask: Anadir tareas nuevas a la lista                      //
+  // Metodo dataTask: Anadir tareas nuevas a la lista                      //
   //----------------------------------------------------------------------//
-  addTask(event) {
+  dataTask(event) {
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo addTask');
+    console.log('HomeComponent - Metodo dataTask');
 
-    this.todoObj = {
-      newTodo: this.newTodo,
-      completed: false
+    // Editar Tarea
+    if(this.editarTask){
+
+      // Guardamos la tarea modificada
+      this.taskObjAdd = {
+        newTask: this.newTask,
+      }
+      // console.log(this.taskObjEdit.newTask)
+      // console.log(this.taskObjAdd.newTask);
+      
+      // Obtenemos los datos de la tarea a modificar
+      var localTasks = JSON.parse(localStorage.getItem('tarea'));
+      for (let index = 0; index < localTasks.length; index++) {
+        if(localTasks[index].newTask === this.taskObjEdit.newTask){
+          localTasks[index].newTask= this.taskObjAdd.newTask,
+          // console.log(localTasks);
+
+          // Guardamos la tarea en localStorage
+          localStorage.setItem('tarea', JSON.stringify(localTasks));
+
+          // Deshabilitamos la edicion
+          this.editarTask = false;
+          
+          // recuperamos los datos modificados y los mostramos
+          this.tasks = JSON.parse(localStorage.getItem('tarea'));
+        }
+      }
+    }else{
+      
+      // Añadir Tarea
+      this.taskObjAdd = {
+        newTask: this.newTask,
+        completed: false
+      }
+  
+      // Insertamos la nueva tarea
+      this.tasks.push(this.taskObjAdd);
+  
+      // Guardamos la tarea en localStorage
+      localStorage.setItem('tarea', JSON.stringify(this.tasks));
     }
 
-    this.todos.push(this.todoObj);
-    // console.log(this.todoObj)
-    // console.log(this.todos)
-
-    // Guardamos la tarea en localStorage
-    localStorage.setItem('tarea', JSON.stringify(this.todos));
-
-    this.newTodo = '';
+    this.newTask = '';
     event.preventDefault();
+
   }
+  //----------------------------------------------------------------------//
+  // Metodo editTask: Edita una tarea seleccionada                        //
+  //----------------------------------------------------------------------//
+  editTask(tarea, index) {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo editTask');
+
+    this.editarTask = true;
+
+    this.taskObjEdit = {
+      newTask: tarea.newTask,
+    }
+
+    this.newTask = tarea.newTask;
+
+  }  
   //----------------------------------------------------------------------//
   // Metodo deleteTask: Eliminar tarea seleccionada                       //
   //----------------------------------------------------------------------//
@@ -52,8 +103,8 @@ export class HomeComponent{
     // Log de seguimiento
     console.log('HomeComponent - Metodo deleteTask');
 
-    this.todos.splice(index, 1);
-    localStorage.setItem('tarea', JSON.stringify(this.todos));
+    this.tasks.splice(index, 1);
+    localStorage.setItem('tarea', JSON.stringify(this.tasks));
   }
   //----------------------------------------------------------------------//
   // Metodo deleteSelectedTasks: Eliminar todas las tareas seleccionadas  //
@@ -63,10 +114,10 @@ export class HomeComponent{
     // Log de seguimiento
     console.log('HomeComponent - Metodo deleteSelectedTasks');
 
-    for(var i=(this.todos.length -1); i > -1; i--) {
-      if(this.todos[i].completed) {
-        this.todos.splice(i, 1);
-        localStorage.setItem('tarea', JSON.stringify(this.todos));
+    for(var i=(this.tasks.length -1); i > -1; i--) {
+      if(this.tasks[i].completed) {
+        this.tasks.splice(i, 1);
+        localStorage.setItem('tarea', JSON.stringify(this.tasks));
       }
     }
     // Deshabilitamos el boton y check
@@ -81,9 +132,9 @@ export class HomeComponent{
     // Log de seguimiento
     console.log('HomeComponent - Metodo drop');
 
-    moveItemInArray(this.todos, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
     // Guardamos el nuevo orden
-    localStorage.setItem('tarea', JSON.stringify(this.todos));
+    localStorage.setItem('tarea', JSON.stringify(this.tasks));
   }
   //----------------------------------------------------------------------//
   // Metodo selectAll: Seleccionar todas las tareas a la vez              //
@@ -95,13 +146,13 @@ export class HomeComponent{
 
     this.selectedAll = !this.selectedAll;
 
-    for (var i = 0; i < this.todos.length; i++) {
-        this.todos[i].selected = this.selectedAll;
-        this.todos[i].completed = this.selectedAll;
+    for (var i = 0; i < this.tasks.length; i++) {
+        this.tasks[i].selected = this.selectedAll;
+        this.tasks[i].completed = this.selectedAll;
     } 
 
     // Guardamos los atributos
-    localStorage.setItem('tarea', JSON.stringify(this.todos));
+    localStorage.setItem('tarea', JSON.stringify(this.tasks));
 
     // Validamos para activar o desactivar el boton
     if(this.selectedAll){
@@ -111,7 +162,7 @@ export class HomeComponent{
     }
   }
   //----------------------------------------------------------------------//
-  // Metodo comprobarSiAllSelected: Seleccionar todas las tareas a la vez              //
+  // Metodo comprobarSiAllSelected: Seleccionar todas las tareas a la vez //
   //----------------------------------------------------------------------//  
   comprobarSiAllSelected() {
 
@@ -120,16 +171,16 @@ export class HomeComponent{
 
     var totalSelected =  0;
     var contador = 0;
-    for (var i = 0; i < this.todos.length; i++) {
-      if(this.todos[i].selected) totalSelected++;
-      if(this.todos[i].completed){
+    for (var i = 0; i < this.tasks.length; i++) {
+      if(this.tasks[i].selected) totalSelected++;
+      if(this.tasks[i].completed){
         contador = contador + 1;
       }
     } 
-    this.selectedAll = totalSelected === this.todos.length;
+    this.selectedAll = totalSelected === this.tasks.length;
 
     // Guardamos los atributos
-    localStorage.setItem('tarea', JSON.stringify(this.todos));
+    localStorage.setItem('tarea', JSON.stringify(this.tasks));
 
     if(contador > 1){
       this.deshabilitado = false;

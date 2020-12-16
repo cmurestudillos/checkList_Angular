@@ -32,6 +32,10 @@
     color: white;
     cursor: pointer;
 }
+.edit-icon{
+    color: #dceb0b;
+    cursor: pointer;
+}
 .delete-icon{
     color: #D32F2F;
     cursor: pointer;

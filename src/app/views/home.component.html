@@ -14,15 +14,16 @@
 
         <!-- Añadir nueva tarea -->
         <div>
-          <form (submit)="addTask($event)">
+          <form (submit)="dataTask($event)">
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
-                    <input [(ngModel)]="newTodo" (keyup.enter)="newTodo=''" class="textfield" name="newTodo" matInput placeholder="Añadir nueva tarea">
+                    <input [(ngModel)]="newTask" (keyup.enter)="newTask=''" class="textfield" name="newTask" matInput placeholder="Añadir nueva tarea">
                   </mat-form-field>
               </div>
               <div class="col-4">
-                <button mat-raised-button  type="submit" class="add-button mt-2" [disabled]="newTodo===''">Añadir</button>
+                <button *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2" [disabled]="newTask===''">Añadir</button>
+                <button *ngIf="editarTask" mat-raised-button  type="submit" class="add-button mt-2" [disabled]="newTask===''">Editar</button>
               </div>
             </div>
           </form>
@@ -30,13 +31,14 @@
 
         <!-- Listado de tareas creadas -->
         <ul cdkDropList (cdkDropListDropped)="drop($event)" class="task-list">
-          <li class="example-box" cdkDrag *ngFor="let todo of todos; let i=index">
+          <li class="example-box" cdkDrag *ngFor="let task of tasks; let i=index">
             <div class="row w-100">
               <div class="col-10">
-                <mat-checkbox class="checkbox" [(ngModel)]="todo.completed" (change)="comprobarSiAllSelected()"><span class="task-added" [ngClass]="{'checked': todo.completed}">{{ todo.newTodo }}</span></mat-checkbox>
+                <mat-checkbox class="checkbox" [(ngModel)]="task.completed" (change)="comprobarSiAllSelected()"><span class="task-added" [ngClass]="{'checked': task.completed}">{{ task.newTask }}</span></mat-checkbox>
               </div>
-              <div class="col-2">
-                <i (click)="deleteTask(i)" class="material-icons delete-icon">delete</i>
+              <div class="col-2 material-icons">
+                <i (click)="editTask(task, i)" class="edit-icon">edit</i>
+                <i (click)="deleteTask(i)" class="delete-icon">delete</i>
               </div>
             </div>
           </li> 
