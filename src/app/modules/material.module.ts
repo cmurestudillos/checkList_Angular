@@ -14,7 +14,8 @@ import {
   MatIconModule,
   MatToolbarModule,
   MatCheckboxModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -29,6 +30,7 @@ import {
     MatToolbarModule,
     MatCheckboxModule,
     MatMenuModule,
+    MatSnackBarModule,
     DragDropModule
   ],
   exports: [
@@ -39,6 +41,7 @@ import {
     MatToolbarModule,
     MatCheckboxModule,
     MatMenuModule,
+    MatSnackBarModule,
     DragDropModule
   ]  
 })

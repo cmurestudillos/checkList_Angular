@@ -27,8 +27,26 @@
     border-radius: 4px;
     overflow: hidden;
 }
-.add-button{
+.mat-checkbox-checked{
+    text-decoration:line-through
+}
+.app-button{
     background:blue;
+    color: white;
+    cursor: pointer;
+}
+.add-button{
+    background:#28a745;
+    color: white;
+    cursor: pointer;
+}
+.edit-button{
+    background:#dceb0b;
+    color: white;
+    cursor: pointer;
+}
+.cancel-button{
+    background:#D32F2F;
     color: white;
     cursor: pointer;
 }

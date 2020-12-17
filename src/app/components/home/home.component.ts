@@ -18,11 +18,24 @@ export class HomeComponent{
   selectedAll: any;
   selectedNames: any;
   editarTask: any;
+  storage = JSON.parse(localStorage.getItem('tarea'));
 
   constructor() {
-    this.tasks = [];
+    console.log(this.storage)
+    this.tasks = JSON.parse(localStorage.getItem('tarea'));
+    if(this.tasks === 0){
+      this.tasks = [];
+    }
+
     this.deshabilitado = true;
     this.editarTask = false;
+  }
+  strikeTask(item){
+
+    console.log(item.newTask);
+    var cadenaTexto = item.newTask;
+    item.newTask = cadenaTexto.strike();
+    
   }
   //----------------------------------------------------------------------//
   // Metodo dataTask: Anadir tareas nuevas a la lista                      //
@@ -60,7 +73,6 @@ export class HomeComponent{
         }
       }
     }else{
-      
       // Añadir Tarea
       this.taskObjAdd = {
         newTask: this.newTask,
@@ -72,6 +84,7 @@ export class HomeComponent{
   
       // Guardamos la tarea en localStorage
       localStorage.setItem('tarea', JSON.stringify(this.tasks));
+      this.storage = this.tasks;
     }
 
     this.newTask = '';
@@ -105,6 +118,7 @@ export class HomeComponent{
 
     this.tasks.splice(index, 1);
     localStorage.setItem('tarea', JSON.stringify(this.tasks));
+    this.storage = this.tasks;
   }
   //----------------------------------------------------------------------//
   // Metodo deleteSelectedTasks: Eliminar todas las tareas seleccionadas  //
@@ -120,6 +134,8 @@ export class HomeComponent{
         localStorage.setItem('tarea', JSON.stringify(this.tasks));
       }
     }
+    this.storage = this.tasks;
+
     // Deshabilitamos el boton y check
     this.selectedAll = false;
     this.deshabilitado = true;
