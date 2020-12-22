@@ -10,10 +10,8 @@ import { version } from '../../../../../package.json';
 export class NavbarComponent implements OnInit {
   title = 'Check List';
   public appVersion: string = version;
-  
-  constructor() { }
 
-  ngOnInit() {
-  }
+  constructor() {}
 
+  ngOnInit() { }
 }

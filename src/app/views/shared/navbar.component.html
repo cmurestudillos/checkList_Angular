@@ -1,21 +1,21 @@
-  <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <!-- Logo -->
-      <img width="100" src="../../assets/img/angular_logo.png" alt="Angular" title="Angular">
-      <!-- Titulo de la Aplicacion -->
-      <h1 class="titulo">{{ title }}</h1>
-      <!-- Info de la aplicacion -->
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- Logo -->
+    <img width="100" src="../../assets/img/angular_logo.png" alt="Angular" title="Angular">
+    <!-- Titulo de la Aplicacion -->
+    <h1 class="titulo">{{ title }}</h1>
+    <!-- Info de la aplicacion -->
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>trending_up</mat-icon>
+          <span><i><b>Version: {{ appVersion }}</b></i></span>
         </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item disabled>
-            <mat-icon>trending_up</mat-icon>
-            <span><i><b>Version: {{ appVersion }}</b></i></span>
-          </button>
-          <button mat-menu-item disabled>
-            <span><i>Copyright © - Carlos Mur</i></span>
-          </button>
-        </mat-menu>
-    </mat-toolbar-row>
-  </mat-toolbar>
+        <button mat-menu-item disabled>
+          <span><i>Copyright © - Carlos Mur</i></span>
+        </button>
+      </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

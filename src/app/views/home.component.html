@@ -1,7 +1,7 @@
-<div class="container">
-  <div class="todos form-wrap">
+<div class="container mx-auto">
+  <div class="todos form-wrap" *ngFor="let list of lists; index as ind">
     <!-- Titulo de la Lista -->
-    <h4>Lista de tareas</h4>
+    <h4>{{lists[ind].title}}</h4>
 
       <div class="form-field-wrap">
         <!-- Acciones a realizar -->
@@ -14,7 +14,7 @@
 
         <!-- Añadir nueva tarea -->
         <div>
-          <form (submit)="dataTask($event)">
+          <form (submit)="dataTask($event, lists[ind].title )" [id]="lists[ind].title">
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
@@ -45,5 +45,31 @@
           </li> 
         </ul>
       </div>
+      <div class="clearfix"></div>
   </div>
+  <!-- Añadir nueva lista -->
+  <mat-drawer-container class="example-container " autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <div class="noScroll">
+        <form (submit)="dataList($event)">
+          <div class="row">
+            <div class="col-8">
+              <mat-form-field  class="full-width">
+                  <input [(ngModel)]="newList" (keyup.enter)="newList=''" class="textfield" name="newList" matInput placeholder="Añadir nueva lista">
+                </mat-form-field>
+            </div>
+            <div class="col-4">
+              <button mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" >Añadir</button>
+            </div>
+          </div>
+        </form>
+      </div>       
+    </mat-drawer>
+  
+    <div class="example-sidenav-content">
+      <button mat-raised-button type="button" (click)="drawer.toggle()">
+        Nueva lista
+      </button>
+    </div>
+  </mat-drawer-container>
 </div>

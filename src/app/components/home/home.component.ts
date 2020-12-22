@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -7,9 +7,15 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent{
+export class HomeComponent implements OnInit{
 
-  // Variables
+  // Variables para Listas
+  newList: string = '';
+  tareasLista: any;
+  listObjAdd: any;
+  lists: any = [];
+  listTitle:  any = [];
+  // Variables para Tareas
   newTask: string = '';
   tasks: any = [];
   taskObjAdd: any;
@@ -18,29 +24,75 @@ export class HomeComponent{
   selectedAll: any;
   selectedNames: any;
   editarTask: any;
-  storage = JSON.parse(localStorage.getItem('tarea'));
+  storage: any = [];
+  // Sidenav
+  showFiller = false;
 
-  constructor() {
-    console.log(this.storage)
-    this.tasks = JSON.parse(localStorage.getItem('tarea'));
-    if(this.tasks === 0){
-      this.tasks = [];
+  constructor() {}
+
+  ngOnInit(){
+    if(localStorage.length > 0){
+      // Carga de las listas ya creadas en el localStorage
+      this.cargaListaTareas();
     }
+  }
+  //----------------------------------------------------------------------//
+  // Metodo cargaListaTareas: Cargar las listas creadas                   //
+  //----------------------------------------------------------------------//  
+  cargaListaTareas(){
+
+    // Log de seguimiento
+    console.log('Home Component - Metodo cargaListaTareas');
+    var numeroListas = localStorage.length;
+    for (let index = 0; index < numeroListas; index++) {
+      this.listObjAdd = {
+        title: localStorage.key(index),
+        tareas: localStorage.getItem(localStorage.key(index))
+      }
+      // Insertamos la lista en el objeto
+      this.lists.push(this.listObjAdd);
+    }
+    this.storage = this.lists;
 
     this.deshabilitado = true;
     this.editarTask = false;
-  }
-  strikeTask(item){
 
-    console.log(item.newTask);
-    var cadenaTexto = item.newTask;
-    item.newTask = cadenaTexto.strike();
-    
-  }
+  }  
+  //----------------------------------------------------------------------//
+  // Metodo dataTask: Anadir lista nueva                                  //
+  //----------------------------------------------------------------------//
+  dataList(event) {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo dataList');
+
+    this.tareasLista = {
+      newTask: '',
+      completed: false,
+      selected: false
+    }
+
+    this.listObjAdd = {
+      title: this.newList,
+      tareas: this.tareasLista
+    }
+
+    // Insertamos la nueva lista
+    this.lists.push(this.listObjAdd);
+
+    // Guardamos la nueva lista en localStorage
+    localStorage.setItem(this.newList, JSON.stringify(this.tareasLista));
+
+    this.storage = this.lists;
+
+    this.newList = '';
+    event.preventDefault();
+
+  } 
   //----------------------------------------------------------------------//
   // Metodo dataTask: Anadir tareas nuevas a la lista                      //
   //----------------------------------------------------------------------//
-  dataTask(event) {
+  dataTask(event, idLista) {
 
     // Log de seguimiento
     console.log('HomeComponent - Metodo dataTask');
@@ -56,20 +108,20 @@ export class HomeComponent{
       // console.log(this.taskObjAdd.newTask);
       
       // Obtenemos los datos de la tarea a modificar
-      var localTasks = JSON.parse(localStorage.getItem('tarea'));
+      var localTasks = JSON.parse(localStorage.getItem(idLista));
       for (let index = 0; index < localTasks.length; index++) {
         if(localTasks[index].newTask === this.taskObjEdit.newTask){
           localTasks[index].newTask= this.taskObjAdd.newTask,
           // console.log(localTasks);
 
           // Guardamos la tarea en localStorage
-          localStorage.setItem('tarea', JSON.stringify(localTasks));
+          localStorage.setItem(idLista, JSON.stringify(localTasks));
 
           // Deshabilitamos la edicion
           this.editarTask = false;
           
           // recuperamos los datos modificados y los mostramos
-          this.tasks = JSON.parse(localStorage.getItem('tarea'));
+          this.tasks = JSON.parse(localStorage.getItem(idLista));
         }
       }
     }else{
@@ -78,12 +130,14 @@ export class HomeComponent{
         newTask: this.newTask,
         completed: false
       }
-  
+
+      // Inicializamos el array
+      this.tasks = [];
       // Insertamos la nueva tarea
       this.tasks.push(this.taskObjAdd);
   
       // Guardamos la tarea en localStorage
-      localStorage.setItem('tarea', JSON.stringify(this.tasks));
+      localStorage.setItem(idLista, JSON.stringify(this.tasks));
       this.storage = this.tasks;
     }
 
@@ -205,5 +259,18 @@ export class HomeComponent{
     }
 
     return true;
+  }
+  //----------------------------------------------------------------------//
+  // Metodo strikeTask: Tachar tareas realizadas                          //
+  //----------------------------------------------------------------------// 
+  strikeTask(item){
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo strikeTask');
+
+    console.log(item.newTask);
+    var cadenaTexto = item.newTask;
+    item.newTask = cadenaTexto.strike();
+    
   }
 }

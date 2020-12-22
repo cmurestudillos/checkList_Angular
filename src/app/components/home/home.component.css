@@ -1,10 +1,15 @@
 /* Estilos del componente */
+.clearfix{
+    clear: both;
+}
 .form-wrap{
     width: 500px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     position: relative;
-    top: -30px;
+    top: -60px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
+    float:left;
+    margin: 25px;
 }
 .form-field-wrap{
     padding: 50px;
@@ -110,4 +115,37 @@
 }
 w-100{
     width: 100%;
+}
+
+/* Sidenav */
+.example-container {
+    position: absolute;
+    top:8%;
+    right: 5%;
+    width: 600px;
+    height: 108px;
+    background-color: transparent;
+}
+ 
+
+.example-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden !important;
+    padding: 5px;
+}
+
+.example-sidenav {
+    width: 70%;
+    padding: 20px;
+    border-radius: 10px;
+}
+.example-sidenav button{
+    height: 32;
+    width: 32;
+}
+.noScroll{
+    overflow: hidden !important;
 }
