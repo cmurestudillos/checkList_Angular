@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
+  templateUrl: '../../views/sidenav.component.html',
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent {

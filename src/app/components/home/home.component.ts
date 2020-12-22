@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit{
 
     // Log de seguimiento
     console.log('Home Component - Metodo cargaListaTareas');
+
     var numeroListas = localStorage.length;
     for (let index = 0; index < numeroListas; index++) {
       this.listObjAdd = {
@@ -89,6 +90,24 @@ export class HomeComponent implements OnInit{
     event.preventDefault();
 
   } 
+  //----------------------------------------------------------------------//
+  // Metodo deleteList: Eliminar Lista                                    //
+  //----------------------------------------------------------------------//
+  deleteList(listaId) {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo deleteList');
+
+    var numeroListas = localStorage.length;
+    for (let index = 0; index < numeroListas; index++) {
+      if(listaId === this.lists[index].title){
+        this.lists.splice(index, 1);
+        localStorage.removeItem(listaId);
+      }
+    }
+
+    this.storage = this.lists;
+  }
   //----------------------------------------------------------------------//
   // Metodo dataTask: Anadir tareas nuevas a la lista                      //
   //----------------------------------------------------------------------//

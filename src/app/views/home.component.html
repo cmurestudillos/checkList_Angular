@@ -1,7 +1,20 @@
 <div class="container mx-auto">
   <div class="todos form-wrap" *ngFor="let list of lists; index as ind">
     <!-- Titulo de la Lista -->
-    <h4>{{lists[ind].title}}</h4>
+    <h4>
+      <span>{{lists[ind].title}}</span>
+
+      <!-- Info de la aplicacion -->
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="list-opciones" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="deleteList(lists[ind].title)">
+            <mat-icon>delete</mat-icon>
+            <span><i><b>Eliminar lista</b></i></span>
+          </button>
+        </mat-menu>
+      </h4>
 
       <div class="form-field-wrap">
         <!-- Acciones a realizar -->
