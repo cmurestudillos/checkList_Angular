@@ -9,6 +9,10 @@
         <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editList(lists[ind].title, drawer)">
+            <mat-icon>edit</mat-icon>
+            <span><i><b>Editar lista</b></i></span>
+          </button>          
           <button mat-menu-item (click)="deleteList(lists[ind].title)">
             <mat-icon>delete</mat-icon>
             <span><i><b>Eliminar lista</b></i></span>
@@ -72,7 +76,8 @@
                 </mat-form-field>
             </div>
             <div class="col-4">
-              <button mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" >Añadir</button>
+              <button *ngIf="!editarList" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" (click)="drawer.toggle()" >Añadir</button>
+              <button *ngIf="editarList" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" (click)="drawer.toggle()" >Modificar</button>
             </div>
           </div>
         </form>
@@ -80,9 +85,8 @@
     </mat-drawer>
   
     <div class="example-sidenav-content">
-      <button mat-raised-button type="button" (click)="drawer.toggle()">
-        Nueva lista
-      </button>
+      <button *ngIf="!editarList" mat-raised-button type="button" (click)="drawer.toggle()">Nueva lista</button>
+      <button *ngIf="editarList" mat-raised-button type="button" (click)="drawer.toggle()">Editar lista</button>
     </div>
   </mat-drawer-container>
 </div>
