@@ -31,7 +31,7 @@
 
         <!-- Añadir nueva tarea -->
         <div>
-          <form (submit)="dataTask($event, lists[ind].title )" [id]="lists[ind].title">
+          <form (submit)="datosTarea($event, lists[ind].title, ind )" [id]="lists[ind].title">
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
@@ -48,7 +48,7 @@
         </div>
 
         <!-- Listado de tareas creadas -->
-        <ul cdkDropList (cdkDropListDropped)="drop($event)" class="task-list">
+        <ul cdkDropList (cdkDropListDropped)="dropTarea($event, lists[ind].title, ind)" class="task-list">
           <li class="example-box" cdkDrag *ngFor="let task of lists[ind].tareas; let i=index">
             <div class="row w-100">
               <div class="col-10">
