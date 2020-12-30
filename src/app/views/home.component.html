@@ -9,11 +9,11 @@
         <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="editList(lists[ind].title, drawer)">
+          <button mat-menu-item (click)="editarLista(lists[ind].title, drawer)">
             <mat-icon>edit</mat-icon>
             <span><i><b>Editar lista</b></i></span>
           </button>          
-          <button mat-menu-item (click)="eliminarLista(lists[ind].title)">
+          <button mat-menu-item (click)="deleteLista(lists[ind].title)">
             <mat-icon>delete</mat-icon>
             <span><i><b>Eliminar lista</b></i></span>
           </button>
@@ -31,7 +31,7 @@
 
         <!-- Añadir nueva tarea -->
         <div>
-          <form (submit)="datosTarea($event, lists[ind].title, ind )" [id]="lists[ind].title">
+          <form (submit)="accionTarea($event, lists[ind].title, ind )" [id]="lists[ind].title">
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
@@ -41,7 +41,7 @@
               <div class="col-4">
                 <button *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newTask===''">Añadir</button>
                 <button *ngIf="editarTask" mat-raised-button  type="submit" class="edit-button mt-2 btn-block" [disabled]="newTask===''">Editar</button>
-                <button *ngIf="editarTask" mat-raised-button  class="cancel-button mt-2 btn-block" [disabled]="newTask===''">Cancelar</button>
+                <button *ngIf="editarTask" mat-raised-button  type="submit" class="cancel-button mt-2 btn-block" [disabled]="newTask===''">Cancelar</button>
               </div>
             </div>
           </form>
@@ -57,8 +57,8 @@
                 </mat-checkbox>
               </div>
               <div class="col-2 material-icons">
-                <i (click)="editTask(task, i)" class="edit-icon">edit</i>
-                <i (click)="eliminarTarea(lists[ind].title, i)" class="delete-icon">delete</i>
+                <i (click)="editarTarea(task)" class="edit-icon">edit</i>
+                <i (click)="deleteTarea(lists[ind].title, i)" class="delete-icon">delete</i>
               </div>
             </div>
           </li> 
@@ -70,7 +70,7 @@
   <mat-drawer-container class="example-container " autosize>
     <mat-drawer #drawer class="example-sidenav" mode="side">
       <div class="noScroll">
-        <form (submit)="dataList($event)">
+        <form (submit)="accionLista($event)">
           <div class="row">
             <div class="col-8">
               <mat-form-field  class="full-width">

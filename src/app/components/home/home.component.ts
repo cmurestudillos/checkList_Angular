@@ -59,14 +59,6 @@ export class HomeComponent implements OnInit{
           }
           // Insertamos la lista en el objeto
           this.lists.push(this.listObjAdd);
-  
-          // console.log(this.listObjAdd.tareas.newTask)
-          // if(this.listObjAdd.tareas.newTask !== ''){
-          //   this.tasks = JSON.parse(localStorage.getItem(this.listObjAdd.title));
-          //   console.log(this.tasks[index].newTask)
-          // }else{
-          //   console.log('no hay tarea');
-          // }
         }
       }
       this.storage = this.lists;
@@ -86,18 +78,66 @@ export class HomeComponent implements OnInit{
   }  
   //----------------------------------------------------------------------//
   //                                                                      //
-  //          ACCIONES PARA LISTAS: CREAR, MODIFICAR Y ELIMINAR           //
-  //                                                                      //
+  //                        ACCIONES PARA LISTAS:                         //
+  //                        ---------------------                         //
   // Funciones:                                                           //
-  //  - crearLista()                                                      //
-  //  - editarlista()                                                     //
-  //  - eliminarLista()                                                   //
+  //  - accionLista(param: event)                                         //
+  //  - editarLista(param: lista, drawer)                                 //
+  //  - createLista()                                                     //
+  //  - updateLista()                                                     //
+  //  - deleteLista(param: lista)                                         //
   //                                                                      //
   //----------------------------------------------------------------------//
+  //----------------------------------------------------------------------//
+  // Metodo accionLista: Accion a realizar con las listas.                //
+  //----------------------------------------------------------------------//
+  accionLista(event) {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo accionLista()');
+
+    // Editar Lista
+    if(this.editarList){
+      this.updateLista();
+    }else{
+      this.createLista();
+    }
+
+    this.newList = '';
+    event.preventDefault();
+
+  }  
+  //----------------------------------------------------------------------//
+  // Metodo editarLista: Carga los datos de la lista a editar             //
+  //----------------------------------------------------------------------//
+  editarLista(lista, drawer) {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo editarLista()');
+
+    try {
+      // Abrimos el formulario para editar
+      drawer.opened = true;
+      // Permitimos edicion
+      this.editarList = true;
+      // Nos guardamos el titulo de la lista antes de editar
+      this.listObjEdit = {
+        newList: lista,
+      }
+      // Cargamos el titulo de la lista en el input
+      this.newList = lista;    
+      // Log de seguimiento
+      console.log('Carga de datos de la lista correctamente.'); 
+    } catch (error) {
+      // Log de seguimiento
+      console.log('Error al cargar los datos de la lista.');
+      console.log(error);
+    }
+  }   
   //----------------------------------------------------------------------//
   // Metodo crearLista: Anadir lista nueva                                //
   //----------------------------------------------------------------------//  
-  crearLista(){
+  createLista(){
 
     // Log de seguimiento
     console.log('HomeComponent - Metodo crearLista()');
@@ -108,40 +148,33 @@ export class HomeComponent implements OnInit{
         title: this.newList,
         tareas: []
       }
-  
       // Insertamos la nueva lista
       this.lists.push(this.listObjAdd);
-  
       // Guardamos la nueva lista en localStorage
       localStorage.setItem(this.newList, JSON.stringify(this.listObjAdd.tareas));
-      
       // Actualizamos el storage con la nueva insercion
       this.storage = this.lists;   
-      
       // Log de seguimiento
       console.log('Lista creada correctamente');
     } catch (error) {
-
       // Log de seguimiento
       console.log('Error al crear lista.');
-
       console.log(error);
     }
   }
   //----------------------------------------------------------------------//
-  // Metodo editarlista: Editar una lista existente                       //
+  // Metodo updateLista: Actualizar lista                                 //
   //----------------------------------------------------------------------// 
-  editarLista(){
+  updateLista(){
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo editarLista()');  
+    console.log('HomeComponent - Metodo updateLista()');  
 
     try {
       // Guardamos el nuevo titulo de la lista
       this.listObjAdd = {
         newList: this.newList,
       }
-
       for (let index = 0; index < this.lists.length; index++) {
         // Si la key que vamos a modificar coindide con uan existente en localstorage,
         // procedemos a la modificacion del objeto
@@ -153,35 +186,29 @@ export class HomeComponent implements OnInit{
           }
           // Modificamos el titulo en pantalla
           this.lists[index].title = this.listObjAdd.title;
-
           // "Eliminamos el objeto moficado"
           localStorage.removeItem(this.listObjEdit.newList);
-
           // Guardamos el nuevo objeto "modificado"
           localStorage.setItem(this.listObjAdd.title, this.listObjAdd.tareas);
-
           // Deshabilitamos la edicion
           this.editarList = false;
-
           // Log de seguimiento
           console.log('Lista modificada correctamente.');
         }
       }        
     } catch (error) {
-
       // Log de seguimiento
       console.log('Error al modificar la lista.');
-
       console.log(error);
     }
   }  
   //----------------------------------------------------------------------//
-  // Metodo deleteList: Eliminar Lista                                    //
+  // Metodo deleteLista: Eliminar Lista                                   //
   //----------------------------------------------------------------------//
-  eliminarLista(lista){
+  deleteLista(lista){
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo eliminarLista()');
+    console.log('HomeComponent - Metodo deleteLista()');
 
     try {
       var numeroListas = localStorage.length;
@@ -192,102 +219,78 @@ export class HomeComponent implements OnInit{
         }
       }
       this.storage = this.lists;   
-      
       // Log de seguimiento
       console.log('Lista eliminada correctamente.');
     } catch (error) {
-
       // Log de seguimiento
       console.log('Error al eliminar la lista.');
-
       console.log(error);
     }
   }  
   //----------------------------------------------------------------------//
-  // Metodo dataTask: Anadir lista nueva                                  //
-  //----------------------------------------------------------------------//
-  dataList(event) {
-
-    // Log de seguimiento
-    console.log('HomeComponent - Metodo dataList');
-
-    // Editar Lista
-    if(this.editarList){
-      this.editarLista();
-    }else{
-      this.crearLista();
-    }
-
-    this.newList = '';
-    event.preventDefault();
-
-  } 
-  //----------------------------------------------------------------------//
-  // Metodo editList: Edita una lista                                     //
-  //----------------------------------------------------------------------//
-  editList(lista, drawer) {
-
-    // Log de seguimiento
-    console.log('HomeComponent - Metodo editList');
-
-    try {
-      // Abrimos el formulario para editar
-      drawer.opened = true;
-
-      this.editarList = true;
-
-      this.listObjEdit = {
-        newList: lista,
-      }
-
-      this.newList = lista;    
-
-      // Log de seguimiento
-      console.log('HomeComponent - Apertura de edicion correcta.'); 
-    } catch (error) {
-      // Log de seguimiento
-      console.log('HomeComponent - Error al abrir edicion de lista.');
-      console.log(error);
-    }
-
-  } 
-  //----------------------------------------------------------------------//
   //                                                                      //
-  //          ACCIONES PARA TAREAS: CREAR, MODIFICAR Y ELIMINAR           //
-  //                                                                      //
+  //                        ACCIONES PARA TAREAS:                         //
+  //                        ---------------------                         //
   // Funciones:                                                           //
-  //  - datosTarea(param: event, lista, idLista)                          //
-  //  - crearTarea(param:lista)                                           //
-  //  - editarTarea(param:lista)                                          //
-  //  - eliminarTarea(param:lista, id)                                    //
+  //  - accionTarea(param: event, lista, idLista)                         //
+  //  - editarTarea(param: tarea)                                         //
+  //  - createTarea(param:lista, idLista)                                 //
+  //  - updateTarea(param:lista, idLista)                                 //
+  //  - deleteTarea(param:lista, idLista)                                 //
+  //  - dropTarea(param: event, lista, ind)                               //
   //                                                                      //
   //----------------------------------------------------------------------//  
   //----------------------------------------------------------------------//
-  // Metodo dataTask: Anadir tareas nuevas a la lista                      //
+  // Metodo accionTarea: Accion a realizar con las tareas.                //
   //----------------------------------------------------------------------//
-  datosTarea(event, lista, ind) {
+  accionTarea(event, lista, ind) {
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo datosTarea()');
+    console.log('HomeComponent - Metodo accionTarea()');
 
     if(this.editarTask){
       // Editar tarea de una lista
-      this.editarTarea(lista, ind)
+      this.updateTarea(lista, ind)
     }else{
       // Añadir tarea a la lista
-      this.crearTarea(lista, ind);
+      this.createTarea(lista, ind);
     }
 
     this.newTask = '';
     event.preventDefault();
   }  
   //----------------------------------------------------------------------//
-  // Metodo crearLista: Anadir una nueva tarea a la lista                 //
-  //----------------------------------------------------------------------//  
-  crearTarea(lista, ind){
+  // Metodo editarTarea: Carga los datos de la tarea a editar             //
+  //----------------------------------------------------------------------//
+  editarTarea(tarea) {
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo crearTarea()');
+    console.log('HomeComponent - Metodo editarTarea()');
+
+    try {
+      // Habilitamos la edicion
+      this.editarTask = true;
+      // Guardamos la tarea a editar
+      this.taskObjEdit = {
+        newTask: tarea.newTask,
+      }
+      // movemos al input la tarea a editar
+      this.newTask = tarea.newTask;      
+      // Log de seguimiento
+      console.log('Carga de datos de la tarea correcta.');      
+    } catch (error) {
+      // Log de seguimiento
+      console.log('Error al cargar los datos de la tarea.');   
+      console.log(error);
+    }
+  }   
+  //----------------------------------------------------------------------//
+  // Metodo createTarea: Anadir una nueva tarea a la lista                //
+  //----------------------------------------------------------------------//  
+  createTarea(lista, ind){
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo createTarea()');
 
     try {
       // Añadir Tarea
@@ -296,19 +299,14 @@ export class HomeComponent implements OnInit{
         completed: false,
         selected: false
       }
-
       // Insertamos la nueva lista
       this.tasks.push(this.taskObjAdd);
-
       // Guardamos la nueva lista en localStorage
       localStorage.setItem(lista, JSON.stringify(this.tasks));
-
       // Recuperamos las tareas ordenadas
       this.lists[ind].tareas = JSON.parse(localStorage.getItem(lista));
-
       // Actualizamos el storage con los nuevos datos
       this.storage = this.lists;
-
       // Log de seguimiento
       console.log('Tarea creada correctamente.');
     } catch (error) {
@@ -318,19 +316,18 @@ export class HomeComponent implements OnInit{
     }
   }  
   //----------------------------------------------------------------------//
-  // Metodo editarTarea: Editar una tarea de la lista                     //
+  // Metodo updateTarea: Actualizar una tarea de la lista                 //
   //----------------------------------------------------------------------//  
-  editarTarea(lista, ind){
+  updateTarea(lista, ind){
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo crearTarea()');
+    console.log('HomeComponent - Metodo updateTarea()');
 
     try {
       // Guardamos la tarea modificada
       this.taskObjAdd = {
         newTask: this.newTask,
       }
-      
       // Obtenemos los datos de la tarea a modificar
       var localTasks = JSON.parse(localStorage.getItem(lista));
       for (let index = 0; index < localTasks.length; index++) {
@@ -355,14 +352,14 @@ export class HomeComponent implements OnInit{
       console.log('Error al tratar de modificar la tarea.');
       console.log(error);
     }
-  }  
+  } 
   //----------------------------------------------------------------------//
-  // Metodo eliminarTarea: Eliminar tarea seleccinada de una lista        //
+  // Metodo deleteTarea: Eliminar tarea seleccinada de una lista        //
   //----------------------------------------------------------------------//
-  eliminarTarea(lista, posicion) {
+  deleteTarea(lista, posicion) {
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo eliminarTarea');
+    console.log('HomeComponent - Metodo deleteTarea()');
 
     try {
       var numeroListas = localStorage.length;
@@ -373,10 +370,8 @@ export class HomeComponent implements OnInit{
           localStorage.setItem(lista, JSON.stringify(this.lists[index].tareas));   
         }
       }
-
       // Actualizamos el storage con los datso actualizados
       this.storage = this.lists;  
-
       // Log de seguimiento
       console.log('Tarea eliminada correctamente.');      
     } catch (error) {
@@ -384,32 +379,25 @@ export class HomeComponent implements OnInit{
       console.log('Error al eliminar la tarea.');     
       console.log(error)
     }
-  }   
+  }  
   //----------------------------------------------------------------------//
-  // Metodo editTask: Edita una tarea seleccionada                        //
+  // Metodo dropTarea: Cambiar el orden de las tareas mediante Drag/Drop  //
   //----------------------------------------------------------------------//
-  editTask(tarea, index) {
+  dropTarea(event: CdkDragDrop<string[]>, lista, ind) {
 
     // Log de seguimiento
-    console.log('HomeComponent - Metodo editTask');
+    console.log('HomeComponent - Metodo dropTarea()');
 
-    try {
-      this.editarTask = true;
-
-      this.taskObjEdit = {
-        newTask: tarea.newTask,
-      }
-  
-      this.newTask = tarea.newTask;      
-
-      // Log de seguimiento
-      console.log('HomeComponent - Apertura de edicion correcta.');      
-    } catch (error) {
-      // Log de seguimiento
-      console.log('HomeComponent - Error al abrir edicion de Tarea.');   
-      console.log(error);
-    }
-  }  
+    // Recuperamos las tareas de la lista
+    this.tasks = JSON.parse(localStorage.getItem(lista));
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+    // Guardamos el nuevo orden de las tareas
+    localStorage.setItem(lista, JSON.stringify(this.tasks));
+    // Recuperamos las tareas ordenadas
+    this.lists[ind].tareas = JSON.parse(localStorage.getItem(lista));
+    // Actualizamos el storage con los nuevos datos
+    this.storage = this.lists;
+  }   
   //----------------------------------------------------------------------//
   // Metodo deleteSelectedTasks: Eliminar todas las tareas seleccionadas  //
   //----------------------------------------------------------------------//
@@ -438,26 +426,6 @@ export class HomeComponent implements OnInit{
       console.log('HomeComponent - Ha ocurrido un error al eliminar las tareas seleccionadas.');
       console.log(error);
     }
-  }
-  //----------------------------------------------------------------------//
-  // Metodo dropTarea: Cambiar el orden de las tareas mediante Drag/Drop  //
-  //----------------------------------------------------------------------//
-  dropTarea(event: CdkDragDrop<string[]>, lista, ind) {
-
-    // Log de seguimiento
-    console.log('HomeComponent - Metodo dropTarea()');
-
-    // Recuperamos las tareas de la lista
-    this.tasks = JSON.parse(localStorage.getItem(lista));
-    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-    // Guardamos el nuevo orden de las tareas
-    localStorage.setItem(lista, JSON.stringify(this.tasks));
-
-    // Recuperamos las tareas ordenadas
-    this.lists[ind].tareas = JSON.parse(localStorage.getItem(lista));
-
-    // Actualizamos el storage con los nuevos datos
-    this.storage = this.lists;
   }
   //----------------------------------------------------------------------//
   // Metodo selectAll: Seleccionar todas las tareas a la vez              //
@@ -527,10 +495,10 @@ export class HomeComponent implements OnInit{
       item.newTask = cadenaTexto.strike();  
       
       // Log de seguimiento
-      console.log('HomeComponent - Tarea tachada correctamente.');    
+      console.log('Tarea tachada correctamente.');    
     } catch (error) {
       // Log de seguimiento
-      console.log('HomeComponent - Ha ocurrido un error al tachar la tarea.');
+      console.log('Ha ocurrido un error al tachar la tarea.');
       console.log(error);
     }
     
