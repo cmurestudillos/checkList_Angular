@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'app-home',
+  selector: 'HomeComponent',
   templateUrl: '../../views/home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -52,14 +52,12 @@ export class HomeComponent implements OnInit{
     try {
       var numeroListas = localStorage.length;
       for (let index = 0; index < numeroListas; index++) {
-        if(localStorage.key(index) !== 'marcadores'){
-          this.listObjAdd = {
-            title: localStorage.key(index),
-            tareas: JSON.parse(localStorage.getItem(localStorage.key(index)))
-          }
-          // Insertamos la lista en el objeto
-          this.lists.push(this.listObjAdd);
+        this.listObjAdd = {
+          title: localStorage.key(index),
+          tareas: JSON.parse(localStorage.getItem(localStorage.key(index)))
         }
+        // Insertamos la lista en el objeto
+        this.lists.push(this.listObjAdd);
       }
       this.storage = this.lists;
 
@@ -234,6 +232,7 @@ export class HomeComponent implements OnInit{
   //                        ---------------------                         //
   // Funciones:                                                           //
   //  - accionTarea(param: event, lista, idLista)                         //
+  //  - cancelarEdicion()                                                 //
   //  - editarTarea(param: tarea)                                         //
   //  - createTarea(param:lista, idLista)                                 //
   //  - updateTarea(param:lista, idLista)                                 //
@@ -259,6 +258,17 @@ export class HomeComponent implements OnInit{
 
     this.newTask = '';
     event.preventDefault();
+  }  
+  //----------------------------------------------------------------------//
+  // Metodo cancelarEdicion: Cancelar la edicion de la tarea.             //
+  //----------------------------------------------------------------------//
+  cancelarEdicion() {
+
+    // Log de seguimiento
+    console.log('HomeComponent - Metodo cancelarEdicion()');
+
+    this.editarTask = false;
+    this.newTask = '';
   }  
   //----------------------------------------------------------------------//
   // Metodo editarTarea: Carga los datos de la tarea a editar             //

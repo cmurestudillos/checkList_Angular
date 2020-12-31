@@ -41,7 +41,7 @@
               <div class="col-4">
                 <button *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newTask===''">Añadir</button>
                 <button *ngIf="editarTask" mat-raised-button  type="submit" class="edit-button mt-2 btn-block" [disabled]="newTask===''">Editar</button>
-                <button *ngIf="editarTask" mat-raised-button  type="submit" class="cancel-button mt-2 btn-block" [disabled]="newTask===''">Cancelar</button>
+                <button *ngIf="editarTask" mat-raised-button  type="button" class="cancel-button mt-2 btn-block" [disabled]="newTask===''" (click)="cancelarEdicion()">Cancelar</button>
               </div>
             </div>
           </form>

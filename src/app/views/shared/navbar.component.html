@@ -9,14 +9,14 @@
       <mat-icon>more_vert</mat-icon>
     </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="fileInput.click()" disabled>
+        <button mat-menu-item (click)="fileInput.click()">
           <mat-icon>arrow_upward</mat-icon>
           <span>Importar Listas</span>
         </button>
-        <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">        
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">        
         <button mat-menu-item disabled>
           <mat-icon>arrow_downward</mat-icon>
-          <span><a id="download" href="" (click)="downloadData()" download="localstorageData.txt">Exportar Listas</a></span>
+          <span><a id="download" href="" (click)="downloadData()" download="localstorageData.json">Exportar Listas</a></span>
         </button>
         <button mat-menu-item disabled>
           <mat-icon>trending_up</mat-icon>
