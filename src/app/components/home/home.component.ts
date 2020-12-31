@@ -75,6 +75,7 @@ export class HomeComponent implements OnInit{
       console.log('HomeComponent - Error en la carga de datos.');
       console.log(error);
     }
+
   }  
   //----------------------------------------------------------------------//
   //                                                                      //

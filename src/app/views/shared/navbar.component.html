@@ -7,8 +7,17 @@
     <!-- Info de la aplicacion -->
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
       <mat-icon>more_vert</mat-icon>
-      </button>
+    </button>
       <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="fileInput.click()" disabled>
+          <mat-icon>arrow_upward</mat-icon>
+          <span>Importar Listas</span>
+        </button>
+        <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">        
+        <button mat-menu-item disabled>
+          <mat-icon>arrow_downward</mat-icon>
+          <span><a id="download" href="" (click)="downloadData()" download="localstorageData.txt">Exportar Listas</a></span>
+        </button>
         <button mat-menu-item disabled>
           <mat-icon>trending_up</mat-icon>
           <span><i><b>Version: {{ appVersion }}</b></i></span>
