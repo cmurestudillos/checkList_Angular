@@ -310,7 +310,10 @@ export class HomeComponent implements OnInit{
         completed: false,
         selected: false
       }
-      // Insertamos la nueva lista
+
+      // Recuperamos las tareas que tenga la lista(tenga o no tareas)
+      this.tasks = JSON.parse(localStorage.getItem(lista));
+      // Insertamos la nueva tarea
       this.tasks.push(this.taskObjAdd);
       // Guardamos la nueva lista en localStorage
       localStorage.setItem(lista, JSON.stringify(this.tasks));
