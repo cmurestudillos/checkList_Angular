@@ -35,13 +35,13 @@
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
-                    <input [(ngModel)]="newTask" (keyup.enter)="newTask=''" class="textfield" name="newTask_{{ind}}" id="newTask_{{ind}}" matInput placeholder="Añadir nueva tarea">
+                    <input type="text" value="{{newTask}}" (change)="valorInput($event, ind)" (keyup.enter)="newTask=''" class="textfield" name="newTask_{{ind}}" id="newTask_{{ind}}" matInput placeholder="Añadir nueva tarea">
                   </mat-form-field>
               </div>
               <div class="col-4">
-                <button *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newTask===''">Añadir</button>
-                <button *ngIf="editarTask" mat-raised-button  type="submit" class="edit-button mt-2 btn-block" [disabled]="newTask===''">Editar</button>
-                <button *ngIf="editarTask" mat-raised-button  type="button" class="cancel-button mt-2 btn-block" [disabled]="newTask===''" (click)="cancelarEdicion()">Cancelar</button>
+                <button id="addButton_{{ind}}" *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2 btn-block">Añadir</button>
+                <button id="editButton_{{ind}}" *ngIf="editarTask" mat-raised-button  type="submit" class="edit-button mt-2 btn-block">Editar</button>
+                <button id="cancelButton_{{ind}}" *ngIf="editarTask" mat-raised-button  type="button" class="cancel-button mt-2 btn-block" (click)="cancelarEdicion()">Cancelar</button>
               </div>
             </div>
           </form>
@@ -57,7 +57,7 @@
                 </mat-checkbox>
               </div>
               <div class="col-2 material-icons">
-                <i (click)="editarTarea(task)" class="edit-icon">edit</i>
+                <i (click)="editarTarea($event, task, ind)" class="edit-icon">edit</i>
                 <i (click)="deleteTarea(lists[ind].title, i)" class="delete-icon">delete</i>
               </div>
             </div>

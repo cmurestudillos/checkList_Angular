@@ -11,12 +11,14 @@ export class HomeComponent implements OnInit{
 
   // Variables para Listas
   //---------------------------
+  nuevaTarea: string = '';
   newList: string = '';
   tareasLista: any;
   listObjAdd: any;
   listObjEdit: any;
   lists: any = [];
   editarList: any;
+  resultado: string = '';
 
   // Variables para Tareas
   //----------------------------
@@ -32,6 +34,9 @@ export class HomeComponent implements OnInit{
   // Sidenav
   //---------------------------
   showFiller = false;
+
+    // Creamos variable que almacenara el ID a borrar
+   inputfocused = "";
 
   constructor() {}
 
@@ -259,6 +264,21 @@ export class HomeComponent implements OnInit{
     this.newTask = '';
     event.preventDefault();
   }  
+
+  valorInput(evt, ind){
+    debugger
+    console.log(evt.target.value);
+    console.log(evt.target.id);
+    var elements = document.querySelectorAll("input[type='text']");
+    
+    // Por cada input field le añadimos una funcion 'onFocus'
+    for (var i = 0; i < elements.length; i++) {
+      let inputID = elements[i].id.substr(8,1);
+      if(ind.toString() === inputID){
+        this.resultado = evt.target.value;
+      }
+    }
+  }
   //----------------------------------------------------------------------//
   // Metodo cancelarEdicion: Cancelar la edicion de la tarea.             //
   //----------------------------------------------------------------------//
@@ -273,12 +293,26 @@ export class HomeComponent implements OnInit{
   //----------------------------------------------------------------------//
   // Metodo editarTarea: Carga los datos de la tarea a editar             //
   //----------------------------------------------------------------------//
-  editarTarea(tarea) {
+  editarTarea(evt, tarea, ind) {
 
     // Log de seguimiento
     console.log('HomeComponent - Metodo editarTarea()');
 
+    debugger
     try {
+      // // Comprobamos que botones deshabilitamos corrspondientes al input seleccionado
+      // var botonesEditar = document.querySelectorAll("button[type='submit']");
+      // // var botonesCancelar = document.querySelectorAll("input[type='button']");
+      // for (var i = 0; i < botonesEditar.length; i++) {
+      //   let buttonID = botonesEditar[i].id.substr(10,1);
+      //   let button = document.getElementById(botonesEditar[i].id) as HTMLButtonElement;
+      //   if(ind.toString() === buttonID){
+      //     button.disabled = false;
+      //   }else{
+      //     button.disabled = true;
+      //   }
+      // } 
+
       // Habilitamos la edicion
       this.editarTask = true;
       // Guardamos la tarea a editar
@@ -286,7 +320,16 @@ export class HomeComponent implements OnInit{
         newTask: tarea.newTask,
       }
       // movemos al input la tarea a editar
-      this.newTask = tarea.newTask;      
+      var elements = document.querySelectorAll("input[type='text']");
+      // Comprobamos que input es el que vamos a editar
+      for (var i = 0; i < elements.length; i++) {
+        let inputID = elements[i].id.substr(8,1);
+        if(ind.toString() === inputID){
+          let input = document.getElementById(elements[i].id) as HTMLInputElement;
+          input.value = tarea.newTask;
+        }
+      }      
+      // this.newTask = tarea.newTask;      
       // Log de seguimiento
       console.log('Carga de datos de la tarea correcta.');      
     } catch (error) {
@@ -304,6 +347,7 @@ export class HomeComponent implements OnInit{
     console.log('HomeComponent - Metodo createTarea()');
 
     try {
+      this.newTask = this.resultado;
       // Añadir Tarea
       this.taskObjAdd = {
         newTask: this.newTask,
@@ -323,6 +367,18 @@ export class HomeComponent implements OnInit{
       this.storage = this.lists;
       // Log de seguimiento
       console.log('Tarea creada correctamente.');
+
+      // Una vez creada la tarea, limpiamos el input
+      var elements = document.querySelectorAll("input[type='text']");
+      // Por cada input field le añadimos una funcion 'onFocus'
+      for (var i = 0; i < elements.length; i++) {
+        let input = document.getElementById(elements[i].id) as HTMLInputElement;
+        if(input.value !== ''){
+          input.value = '';
+        }
+      
+      }
+
     } catch (error) {
       // Log de seguimiento
       console.log('Error al crear la tarea.');
@@ -338,6 +394,7 @@ export class HomeComponent implements OnInit{
     console.log('HomeComponent - Metodo updateTarea()');
 
     try {
+      this.newTask = this.resultado;
       // Guardamos la tarea modificada
       this.taskObjAdd = {
         newTask: this.newTask,
