@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { version } from '../../../../../package.json';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'NavBarComponent',
   templateUrl: '../../../views/shared/navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
@@ -22,13 +22,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() { }
 
-  //----------------------------------------------------------------------//
-  // Metodo downloadData: Exporta los datos del localStorage en un .json  //
-  //----------------------------------------------------------------------// 
+  //=========================================================================================//
+  // function downloadData: Exporta los datos del localStorage en un .json                   //
+  //=========================================================================================// 
   downloadData(){
-    
     // Log de seguimiento
-    console.log('Home Component - Metodo downloadData()');
+    console.log('downloadData()');
 
     try {
       var downloadlink = document.getElementById('download')  as HTMLLinkElement;
@@ -67,11 +66,10 @@ export class NavbarComponent implements OnInit {
       console.log(error);
     }
   }
-  //----------------------------------------------------------------------//
-  // Metodo onFileSelected: Importa los datos del localStorage            //
-  //----------------------------------------------------------------------//  
+  //=========================================================================================//
+  // function onFileSelected: Importa los datos del localStorage                             //
+  //=========================================================================================//  
   onFileSelected(file) {
-  
     this.fileToUpload = file.target.files[0];
     
     // Validamos que sea un fichero valido

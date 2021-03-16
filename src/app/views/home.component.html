@@ -1,94 +1,103 @@
-<div class="container mx-auto">
-  <div class="todos form-wrap" *ngFor="let list of lists; index as ind">
-    <!-- Titulo de la Lista -->
-    <h4>
-      <span>{{lists[ind].title}}</span>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <!-- <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button> -->
+  <button id="btnNuevaLista" mat-raised-button class="btn btn-outline-primary" *ngIf="!actUpdate" (click)="drawer.toggle() && showLista = false">Nueva lista</button>
+  <button id="btnEditarLista" mat-raised-button class="btn btn-outline-danger" *ngIf="actUpdate" (click)="drawer.toggle(false) && actUpdate = false">Cancelar</button>
+  <!-- Añadir nueva lista -->
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <div class="noScroll">
+        <div class="row">
+          <div class="col-8">
+            <mat-form-field  class="full-width">
+                <input [(ngModel)]="nuevaLista" (keyup.enter)="nuevaLista=''" class="textfield" name="nuevaLista" matInput placeholder="Añadir nueva lista">
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <button *ngIf="!actUpdate" mat-raised-button class="btn btn-outline-success mt-2 btn-block" [disabled]="nuevaLista ===''" (click)="createLista(nuevaLista, drawer)" >Confirmar</button>
+            <button *ngIf="actUpdate" mat-raised-button class="btn btn-outline-warning mt-2 btn-block" [disabled]="nuevaLista ===''" (click)="updateLista(nuevaLista, oldLista, drawer)" >Modificar</button>
+          </div>
+        </div>
+      </div>       
+    </mat-drawer>
+  </mat-drawer-container>      
+</nav>
 
-      <!-- Info de la aplicacion -->
-      <button mat-icon-button [matMenuTriggerFor]="menu" class="list-opciones" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="editarLista(lists[ind].title, drawer)">
-            <mat-icon>edit</mat-icon>
-            <span><i><b>Editar lista</b></i></span>
-          </button>          
-          <button mat-menu-item (click)="deleteLista(lists[ind].title)">
-            <mat-icon>delete</mat-icon>
-            <span><i><b>Eliminar lista</b></i></span>
+<div class="d-flex" id="wrapper">
+  <!-- Sidebar -->
+  <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading"> <strong>Listas</strong> </div>
+    <div class="list-group list-group-flush" *ngFor="let lista of listas; index as ind">
+      <button [id]="ind" (click)="datosLista( listas[ind].title, ind )" class="list-group-item list-group-item-action bg-light">{{listas[ind].title}}</button>
+    </div>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="todos form-wrap" *ngIf="showLista">
+        <!-- Titulo de la Lista -->
+        <h4> 
+          {{tituloLista}} 
+          <!-- Info de la aplicacion -->
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="list-opciones" aria-label="Example icon-button with a menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="datosListaEdicion(tituloLista, drawer)">
+                <mat-icon>edit</mat-icon>
+                <span><i><b>Editar lista</b></i></span>
+              </button>          
+              <button mat-menu-item (click)="deleteLista(tituloLista)">
+                <mat-icon>delete</mat-icon>
+                <span><i><b>Eliminar lista</b></i></span>
+              </button>
+            </mat-menu>
+        </h4>
+
+        <div class="form-field-wrap">
+          <!-- Acciones a realizar -->
+          <!-- Seleccion de todos los registros -->
+          <button mat-raised-button class="app-button m-2" (click)="selectAll(tituloLista)" [disabled]="seleccionarTodas">
+            <span>Seleccionar todas</span>
           </button>
-        </mat-menu>
-      </h4>
+          <!-- Boton para eliminar todas las tareas -->
+          <button mat-raised-button class="delete-selected" (click)="deleteTareas(tituloLista)" [disabled]="eliminarSeleccionadas">Eliminar seleccionadas</button>
 
-      <div class="form-field-wrap">
-        <!-- Acciones a realizar -->
-            <!-- Seleccion de todos los registros -->
-            <button mat-raised-button class="app-button m-2" (click)="selectAll()" [disabled]="storage.length === 0">
-              <span>Seleccionar todas</span>
-            </button>
-            <!-- Boton para eliminar todas las tareas -->
-            <button mat-raised-button class="delete-selected" [disabled]="deshabilitado" (click)="deleteSelectedTasks()">Eliminar seleccionadas</button>
-
-        <!-- Añadir nueva tarea -->
-        <div>
-          <form (submit)="accionTarea($event, lists[ind].title, ind )" [id]="lists[ind].title">
+          <!-- Añadir nueva tarea -->
+          <div>
             <div class="row">
               <div class="col-8">
                 <mat-form-field  class="full-width">
-                    <input type="text" value="{{newTask}}" (change)="valorInput($event, ind)" (keyup.enter)="newTask=''" class="textfield" name="newTask_{{ind}}" id="newTask_{{ind}}" matInput placeholder="Añadir nueva tarea">
+                    <input type="text" value="{{nuevaTarea}}" (change)="valorInput($event)" (keyup.enter)="nuevaTarea=''" class="textfield" name="nuevaTarea" id="nuevaTarea" matInput placeholder="Añadir nueva tarea">
                   </mat-form-field>
               </div>
               <div class="col-4">
-                <button id="addButton_{{ind}}" *ngIf="!editarTask" mat-raised-button  type="submit" class="add-button mt-2 btn-block">Añadir</button>
-                <button id="editButton_{{ind}}" *ngIf="editarTask" mat-raised-button  type="submit" class="edit-button mt-2 btn-block">Editar</button>
-                <button id="cancelButton_{{ind}}" *ngIf="editarTask" mat-raised-button  type="button" class="cancel-button mt-2 btn-block" (click)="cancelarEdicion()">Cancelar</button>
+                <button *ngIf="!edicionTarea" mat-raised-button class="add-button mt-2 btn-block" (click)="createTarea(tituloLista)">Añadir</button>
+                <button *ngIf="edicionTarea" mat-raised-button  class="edit-button mt-2 btn-block" (click)="updateTarea(tituloLista, oldTarea)">Editar</button>
+                <button id="cancelButton" *ngIf="edicionTarea" mat-raised-button  type="button" class="cancel-button mt-2 btn-block" (click)="cancelTarea()">Cancelar</button>
               </div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Listado de tareas creadas -->
-        <ul cdkDropList (cdkDropListDropped)="dropTarea($event, lists[ind].title, ind)" class="task-list">
-          <li class="example-box" cdkDrag *ngFor="let task of lists[ind].tareas; let i=index">
-            <div class="row w-100">
-              <div class="col-10">
-                <mat-checkbox  class="checkbox" [(ngModel)]="task.completed" (change)="comprobarSiAllSelected()">
-                  <span class="task-added" [ngClass]="{'checked': task.completed}">{{ task.newTask }}</span>
-                </mat-checkbox>
-              </div>
-              <div class="col-2 material-icons">
-                <i (click)="editarTarea($event, task, ind)" class="edit-icon">edit</i>
-                <i (click)="deleteTarea(lists[ind].title, i)" class="delete-icon">delete</i>
-              </div>
-            </div>
-          </li> 
-        </ul>
-      </div>
-      <div class="clearfix"></div>
-  </div>
-  <!-- Añadir nueva lista -->
-  <mat-drawer-container class="example-container " autosize>
-    <mat-drawer #drawer class="example-sidenav" mode="side">
-      <div class="noScroll">
-        <form (submit)="accionLista($event)">
-          <div class="row">
-            <div class="col-8">
-              <mat-form-field  class="full-width">
-                  <input [(ngModel)]="newList" (keyup.enter)="newList=''" class="textfield" name="newList" matInput placeholder="Añadir nueva lista">
-                </mat-form-field>
-            </div>
-            <div class="col-4">
-              <button *ngIf="!editarList" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" (click)="drawer.toggle()" >Añadir</button>
-              <button *ngIf="editarList" mat-raised-button  type="submit" class="add-button mt-2 btn-block" [disabled]="newList ===''" (click)="drawer.toggle()" >Modificar</button>
             </div>
           </div>
-        </form>
-      </div>       
-    </mat-drawer>
-  
-    <div class="example-sidenav-content">
-      <button *ngIf="!editarList" mat-raised-button type="button" (click)="drawer.toggle()">Nueva lista</button>
-      <button *ngIf="editarList" mat-raised-button type="button" (click)="drawer.toggle()">Editar lista</button>
+
+          <!-- Listado de tareas -->
+          <ul cdkDropList (cdkDropListDropped)="dropTarea($event, tituloLista)" class="task-list">
+            <li class="example-box" cdkDrag *ngFor="let tarea of tareas; let i=index">
+              <div class="row w-100">
+                <div class="col-10">
+                  <mat-checkbox  class="checkbox" [(ngModel)]="tarea.completed" (change)="comprobarTareasSeleccionadas(tituloLista, i)">
+                    <span class="task-added" [ngClass]="{'checked': tarea.completed}">{{ tarea.tarea }}</span>
+                  </mat-checkbox>
+                </div>
+                <div class="col-2 material-icons">
+                  <i (click)="datosTareaEdicion(tarea.tarea, i)" class="edit-icon">edit</i>
+                  <i (click)="deleteTarea(i)" class="delete-icon">delete</i>
+                </div>
+              </div>
+            </li> 
+          </ul>
+        </div>
+      <div class="clearfix"></div>      
     </div>
-  </mat-drawer-container>
+  </div>
+  <!-- /#page-content-wrapper -->
 </div>
+<!-- /#wrapper -->
