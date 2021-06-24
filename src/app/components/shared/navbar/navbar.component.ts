@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // Version de la aplicacion
-import { version } from '../../../../../package.json';
+import packageInfo from '../../../../../package.json';
 
 @Component({
   selector: 'NavBarComponent',
@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
   // titulo de la Aplicacion
   title = 'Check List';
   // Version de la aplicacion
-  public appVersion: string = version;
+  public appVersion: string = packageInfo.version;
   // Variables para trabajo con ficheros
   fileToUpload: File = null;
   fileLocalstorage: any;
